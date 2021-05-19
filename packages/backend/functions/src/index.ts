@@ -1,15 +1,26 @@
-import Hapi, { Server } from '@hapi/hapi';
-// import * as functions from "firebase-functions";
+// import * as functions from 'firebase-functions';
 
-export let server: Server;
+// exports.helloWorld = functions.https.onRequest((_request, response) => {
+//   response.send('Hello from Firebase!');
+// });
+
+import { Server } from '@hapi/hapi';
+
+let server: Server;
 
 export const init = async function (): Promise<Server> {
-  server = Hapi.server({
+  server = new Server({
     port: process.env.PORT || 4000,
     host: '0.0.0.0'
   });
 
-  // Routes will go here
+  server.route({
+    method: 'GET',
+    path: '/',
+    handler: (request, h) => {
+      return 'Hello World!';
+    }
+  });
 
   return server;
 };
@@ -24,3 +35,5 @@ process.on('unhandledRejection', err => {
   console.error(err);
   process.exit(1);
 });
+
+init().then(() => start());
