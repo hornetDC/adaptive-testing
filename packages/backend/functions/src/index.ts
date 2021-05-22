@@ -1,39 +1,18 @@
-// import * as functions from 'firebase-functions';
+import * as functions from 'firebase-functions';
+import * as express from 'express';
+import { getQuestions } from './controllers/questions';
+import { loginUser, signUpUser, getUserDetail } from './controllers/users';
+import { auth } from './utils/auth';
 
-// exports.helloWorld = functions.https.onRequest((_request, response) => {
-//   response.send('Hello from Firebase!');
-// });
+const app = express();
 
-import { Server } from '@hapi/hapi';
+app.use(express.json());
 
-let server: Server;
+app.get('/questions', getQuestions);
 
-export const init = async function (): Promise<Server> {
-  server = new Server({
-    port: process.env.PORT || 4000,
-    host: '0.0.0.0'
-  });
+// Users
+app.post('/login', loginUser);
+app.post('/signup', signUpUser);
+app.get('/user', auth, getUserDetail);
 
-  server.route({
-    method: 'GET',
-    path: '/',
-    handler: (request, h) => {
-      return 'Hello World!';
-    }
-  });
-
-  return server;
-};
-
-export const start = async function (): Promise<void> {
-  console.log(`Listening on ${server.settings.host}:${server.settings.port}`);
-  return server.start();
-};
-
-process.on('unhandledRejection', err => {
-  console.error('unhandledRejection');
-  console.error(err);
-  process.exit(1);
-});
-
-init().then(() => start());
+export const api = functions.https.onRequest(app);

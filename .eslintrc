@@ -22,6 +22,8 @@
   },
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
-    "camelcase": "error"
-  }
+    "camelcase": "error",
+    "@typescript-eslint/no-explicit-any": ""
+  },
+  "ignorePatterns": "lib/"
 }
