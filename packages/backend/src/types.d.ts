@@ -11,4 +11,5 @@ export type Question = {
 export type AuthData = {
   email: string;
   password: string;
+  admin?: boolean;
 };

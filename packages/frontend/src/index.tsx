@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import './bootstrap.min.css';
 import 'modern-normalize/modern-normalize.css';
+import 'react-toastify/dist/ReactToastify.css';
 import reportWebVitals from './reportWebVitals';
 import App from './App';
 import { AuthContextWrapper } from './context/AuthContext';

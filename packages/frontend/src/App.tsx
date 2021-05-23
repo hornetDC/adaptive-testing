@@ -1,24 +1,35 @@
 import { useContext } from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import Login from 'views/Login';
+import { ToastContainer } from 'react-toastify';
 import AuthContext from 'context/AuthContext';
+import Login from 'views/Login';
+import Home from 'views/Home';
+import Test from 'views/Test';
 
 const App = () => {
   const { authorized } = useContext(AuthContext);
   return (
-    <Router>
-      {!authorized && <Redirect to="/login" />}
-      <Switch>
-        {authorized && (
-          <Route exact path="/">
-            Home
+    <>
+      <ToastContainer position="bottom-right" autoClose={3000} />
+      <Router>
+        {!authorized && <Redirect to="/login" />}
+        <Switch>
+          {authorized && (
+            <>
+              <Route exact path="/">
+                <Home />
+              </Route>
+              <Route exact path="/test">
+                <Test />
+              </Route>
+            </>
+          )}
+          <Route path="/login">
+            <Login />
           </Route>
-        )}
-        <Route path="/login">
-          <Login />
-        </Route>
-      </Switch>
-    </Router>
+        </Switch>
+      </Router>
+    </>
   );
 };
 

@@ -1,11 +1,10 @@
-import AuthContext from 'context/AuthContext';
 import React, { useContext, useState } from 'react';
-import { Form, Button, Container } from 'react-bootstrap';
 import { useHistory } from 'react-router';
+import { toast } from 'react-toastify';
+import { Form, Button, Container } from 'react-bootstrap';
+import AuthContext from 'context/AuthContext';
 
-interface AuthProps {}
-
-const Auth: React.FC<AuthProps> = () => {
+const Auth: React.FC = () => {
   const history = useHistory();
   const { login } = useContext(AuthContext);
   const [email, setEmail] = useState('');
@@ -18,17 +17,16 @@ const Auth: React.FC<AuthProps> = () => {
       await login(formValues);
       history.replace('/');
     } catch (err) {
-      alert(err.response?.general || err.message);
+      toast.error(err.response?.error || err.message);
     }
   };
 
   return (
-    <Container className="h-100 d-flex align-items-center justify-content-center">
-      <Form className="border p-3 w-100" onSubmit={handleSubmit}>
+    <Container className="h-100 d-flex align-items-center justify-content-center" fluid="sm">
+      <Form className="p-3 w-100 bg-light border" onSubmit={handleSubmit}>
         <Form.Group controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control
-            // name="email"
             type="email"
             placeholder="Enter email"
             value={email}
@@ -40,7 +38,6 @@ const Auth: React.FC<AuthProps> = () => {
         <Form.Group className="mt-3" controlId="formBasicPassword">
           <Form.Label>Password</Form.Label>
           <Form.Control
-            // name="password"
             type="password"
             placeholder="Password"
             value={password}

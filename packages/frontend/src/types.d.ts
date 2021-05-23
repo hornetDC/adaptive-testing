@@ -18,3 +18,5 @@ export type LoginData = {
   email: string;
   password: string;
 };
+
+type FormControlElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;

@@ -6,6 +6,7 @@ export const auth = async (
   response: Response,
   next: NextFunction
 ): Promise<any> => {
+  console.log('auth!');
   try {
     let idToken;
     if (request.headers.authorization && request.headers.authorization.startsWith('Bearer ')) {
@@ -20,6 +21,6 @@ export const auth = async (
     return next();
   } catch (err) {
     console.error('Error while verifying token', err);
-    return response.status(403).json(err);
+    return response.status(403).json({ error: 'Error while verifying token' });
   }
 };

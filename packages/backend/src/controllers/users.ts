@@ -11,11 +11,14 @@ firebase.initializeApp(config);
 export const loginUser = async (
   request: Request,
   response: Response
-): Promise<Response<{ token: string }>> => {
+): Promise<Response<AuthData & { token: string }>> => {
+  const adminUsers = (process.env.ADMIN_USERS || '').replace(' ', '').split(',');
+
   try {
     const user: AuthData = {
       email: request.body.email,
-      password: request.body.password
+      password: request.body.password,
+      admin: adminUsers.includes(request.body.email)
     };
 
     const { valid, errors } = validateLoginData(user);
@@ -25,10 +28,10 @@ export const loginUser = async (
     const token = await data.user?.getIdToken();
     if (!token) throw Error(`Couldn't get token`);
 
-    return response.json({ token });
+    return response.json({ token, ...user });
   } catch (err) {
     console.error(err.message);
-    return response.status(403).json({ general: err.message });
+    return response.status(403).json({ error: err.message });
   }
 };
 
@@ -72,7 +75,7 @@ export const signUpUser = async (
     if (err.code === 'auth/email-already-in-use') {
       return response.status(400).json({ email: 'Email already in use' });
     } else {
-      return response.status(500).json({ general: 'Something went wrong, please try again' });
+      return response.status(500).json({ error: 'Something went wrong, please try again' });
     }
   }
 };
@@ -88,21 +91,6 @@ export const getUserDetail = async (
     return response.json(data);
   } catch (err) {
     console.error(err);
-    return response.status(500).json({ error: err.code });
+    return response.status(500).json({ error: err.message });
   }
 };
-
-// export const updateUserDetails = (request, response) => {
-//   let document = db.collection('users').doc(`${request.user.username}`);
-//   document
-//     .update(request.body)
-//     .then(() => {
-//       response.json({ message: 'Updated successfully' });
-//     })
-//     .catch(error => {
-//       console.error(error);
-//       return response.status(500).json({
-//         message: 'Cannot Update the value'
-//       });
-//     });
-// };
