@@ -1,7 +1,6 @@
 export type Question = {
   id: string;
   type: 'options' | 'input';
-  position: number;
   difficulty: number;
   text: string;
   answer: string;
@@ -12,6 +11,7 @@ export type AuthData = {
   token: string;
   email: string;
   password: string;
+  role: 'admin' | 'manager' | 'user';
 };
 
 export type LoginData = {

@@ -1,7 +1,7 @@
-import { LoginData } from 'types';
+import { AuthData, LoginData } from 'types';
 import fetch from 'utils/fetch';
 
-export async function login(params: LoginData): Promise<{ token: string }> {
+export async function login(params: LoginData): Promise<AuthData> {
   const response = await fetch(`/login`, {
     method: 'POST',
     body: JSON.stringify(params),

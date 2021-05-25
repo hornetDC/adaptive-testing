@@ -1,26 +1,51 @@
 import { Request, Response, NextFunction } from 'express';
 import { admin } from './admin';
 
-export const auth = async (
-  request: Request,
-  response: Response,
-  next: NextFunction
-): Promise<any> => {
-  console.log('auth!');
+export function getAdminUsers() {
+  return (process.env.ADMIN_USERS || '').replace(' ', '').split(',');
+}
+
+export async function isAuthenticated(req: Request, res: Response, next: NextFunction) {
+  const { authorization } = req.headers;
+
+  if (!authorization) return res.status(401).send({ message: 'Unauthorized' });
+
+  if (!authorization.startsWith('Bearer')) return res.status(401).send({ message: 'Unauthorized' });
+
+  const split = authorization.split('Bearer ');
+  if (split.length !== 2) return res.status(401).send({ message: 'Unauthorized' });
+
+  const token = split[1];
+
   try {
-    let idToken;
-    if (request.headers.authorization && request.headers.authorization.startsWith('Bearer ')) {
-      idToken = request.headers.authorization.split('Bearer ')[1];
-    } else {
-      console.error('No token found');
-      return response.status(403).json({ error: 'Unauthorized' });
-    }
-
-    await admin.auth().verifyIdToken(idToken);
-
+    const decodedToken: admin.auth.DecodedIdToken = await admin.auth().verifyIdToken(token);
+    res.locals = {
+      ...res.locals,
+      uid: decodedToken.uid,
+      role: decodedToken.role,
+      email: decodedToken.email
+    };
     return next();
   } catch (err) {
-    console.error('Error while verifying token', err);
-    return response.status(403).json({ error: 'Error while verifying token' });
+    console.error(`${err.code} -  ${err.message}`);
+    return res.status(401).send({ message: 'Unauthorized' });
   }
-};
+}
+
+export function isAuthorized(opts: {
+  hasRole: Array<'admin' | 'manager' | 'user'>;
+  allowSameUser?: boolean;
+}) {
+  return (req: Request, res: Response, next: Function) => {
+    const { role, uid } = res.locals;
+    const { id } = req.params;
+
+    if (opts.allowSameUser && id && uid === id) return next();
+
+    if (!role) return res.status(403).send();
+
+    if (opts.hasRole.includes(role)) return next();
+
+    return res.status(403).send();
+  };
+}

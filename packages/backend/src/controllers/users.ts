@@ -1,6 +1,6 @@
 import firebase from 'firebase';
 import { Request, Response } from 'express';
-import { db } from '../utils/admin';
+import { admin, db } from '../utils/admin';
 import { validateLoginData, validateSignUpData } from '../utils/validators';
 import * as config from '../utils/firebaseConfig.json';
 import { AuthData } from 'types';
@@ -8,17 +8,17 @@ import { AuthData } from 'types';
 firebase.initializeApp(config);
 
 // Login
-export const loginUser = async (
+export async function loginUser(
   request: Request,
   response: Response
-): Promise<Response<AuthData & { token: string }>> => {
-  const adminUsers = (process.env.ADMIN_USERS || '').replace(' ', '').split(',');
+): Promise<Response<AuthData & { token: string }>> {
+  const { role } = response.locals;
+  console.log('role', role);
 
   try {
-    const user: AuthData = {
+    const user = {
       email: request.body.email,
-      password: request.body.password,
-      admin: adminUsers.includes(request.body.email)
+      password: request.body.password
     };
 
     const { valid, errors } = validateLoginData(user);
@@ -27,24 +27,27 @@ export const loginUser = async (
     const data = await firebase.auth().signInWithEmailAndPassword(user.email, user.password);
     const token = await data.user?.getIdToken();
     if (!token) throw Error(`Couldn't get token`);
+    const decodedToken: admin.auth.DecodedIdToken = await admin.auth().verifyIdToken(token);
+    // if (data.user) await admin.auth().setCustomUserClaims(data.user.uid, { role: 'admin' });
 
-    return response.json({ token, ...user });
+    return response.json({ token, ...user, role: decodedToken.role || 'user' });
   } catch (err) {
     console.error(err.message);
     return response.status(403).json({ error: err.message });
   }
-};
+}
 
 // Sign up
-export const signUpUser = async (
+export async function signUpUser(
   request: Request,
   response: Response
-): Promise<Response<{ token: string }>> => {
+): Promise<Response<{ token: string }>> {
   try {
     const newUser = {
       email: request.body.email,
       password: request.body.password,
-      confirmPassword: request.body.confirmPassword
+      confirmPassword: request.body.confirmPassword,
+      role: request.body.role
     };
 
     const { valid, errors } = validateSignUpData(newUser);
@@ -78,12 +81,12 @@ export const signUpUser = async (
       return response.status(500).json({ error: 'Something went wrong, please try again' });
     }
   }
-};
+}
 
-export const getUserDetail = async (
+export async function getUserDetail(
   request: Request,
   response: Response
-): Promise<Response<{ userCredentials: { id: string; email: string } }>> => {
+): Promise<Response<{ userCredentials: { id: string; email: string } }>> {
   try {
     const doc = await db.doc(`/users/${request.body.user.username}`).get();
     if (!doc.exists) throw Error(`Such user doesn't exist`);
@@ -93,4 +96,4 @@ export const getUserDetail = async (
     console.error(err);
     return response.status(500).json({ error: err.message });
   }
-};
+}

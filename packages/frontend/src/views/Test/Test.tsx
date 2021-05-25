@@ -8,7 +8,7 @@ import Question from 'components/Question';
 
 const Test: React.FC = () => {
   const [questions, setQuestions] = useState<QuestionData[]>();
-  const [answers, setAnswers] = useState({});
+  const [, setAnswers] = useState({});
 
   useEffect(() => {
     (async () => {

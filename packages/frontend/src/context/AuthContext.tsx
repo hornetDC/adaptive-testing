@@ -28,11 +28,10 @@ export const AuthContextWrapper = ({ children }) => {
   const authorized = Boolean(authData);
 
   const login = async (data: LoginData) => {
-    const { token } = await loginRequest(data);
-    const authData = { token, ...data };
+    const authData = await loginRequest(data);
     setAuthData(authData);
-    localStorage.setItem('authData', JSON.stringify(data));
-    localStorage.setItem('authToken', `Bearer ${token}`);
+    localStorage.setItem('authData', JSON.stringify(authData));
+    localStorage.setItem('authToken', `Bearer ${authData.token}`);
   };
 
   const logout = useCallback(async () => {

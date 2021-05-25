@@ -1,4 +1,4 @@
-import { AuthData } from 'types';
+import { AuthData, LoginData } from 'types';
 
 type ErrorsObject = {
   [key: string]: string;
@@ -14,7 +14,7 @@ const isEmpty = (string: any) => {
   else return false;
 };
 
-export const validateLoginData = (data: AuthData): ValidationObject => {
+export const validateLoginData = (data: LoginData): ValidationObject => {
   const errors: ErrorsObject = {};
 
   if (isEmpty(data.email)) errors.email = 'Must not be empty';
