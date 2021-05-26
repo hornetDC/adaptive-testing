@@ -1,0 +1,25 @@
+.deleteButton {
+  float: right;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
+  width: 20px;
+  height: 20px;
+  line-height: unset;
+  fill: #dc3545;
+  cursor: pointer;
+  z-index: 1;
+
+  &:disabled {
+    fill: #6c757d;
+    pointer-events: none;
+  }
+
+  &:hover,
+  &:active {
+    opacity: 0.7;
+  }
+}

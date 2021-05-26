@@ -19,6 +19,7 @@ export async function isAuthenticated(req: Request, res: Response, next: NextFun
 
   try {
     const decodedToken: admin.auth.DecodedIdToken = await admin.auth().verifyIdToken(token);
+    // console.log('decodedToken', decodedToken);
     res.locals = {
       ...res.locals,
       uid: decodedToken.uid,
@@ -27,7 +28,7 @@ export async function isAuthenticated(req: Request, res: Response, next: NextFun
     };
     return next();
   } catch (err) {
-    console.error(`${err.code} -  ${err.message}`);
+    console.error(err);
     return res.status(401).send({ message: 'Unauthorized' });
   }
 }

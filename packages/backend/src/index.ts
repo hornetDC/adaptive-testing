@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as express from 'express';
 import { config as dotenv } from 'dotenv';
-import { getQuestions, createQuestion } from './controllers/questions';
+import { getQuestions, createQuestion, deleteQuestion } from './controllers/questions';
 import { loginUser, signUpUser, getUserDetail } from './controllers/users';
 import { isAuthenticated, isAuthorized } from './utils/auth';
 
@@ -13,6 +13,7 @@ app.use(express.json());
 
 app.get('/questions', isAuthenticated, getQuestions);
 app.post('/questions', isAuthenticated, isAuthorized({ hasRole: ['admin'] }), createQuestion);
+app.delete('/questions/:id', isAuthenticated, isAuthorized({ hasRole: ['admin'] }), deleteQuestion);
 
 app.get('/user', isAuthenticated, getUserDetail);
 app.post('/login', loginUser);

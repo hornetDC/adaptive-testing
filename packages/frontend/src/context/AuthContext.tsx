@@ -36,8 +36,7 @@ export const AuthContextWrapper = ({ children }) => {
 
   const logout = useCallback(async () => {
     setAuthData(undefined);
-    localStorage.removeItem('authData');
-    localStorage.removeItem('authToken');
+    localStorage.clear();
   }, []);
 
   const values: AuthContextValues = {

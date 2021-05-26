@@ -16,3 +16,7 @@ export async function createQuestion(body: Omit<Question, 'id'>): Promise<Questi
   const data = await response.json();
   return data;
 }
+
+export async function deleteQuestion(id: string): Promise<void> {
+  await fetch(`/questions/${id}`, { method: 'DELETE' });
+}

@@ -1,4 +1,4 @@
-import { AuthData, LoginData } from 'types';
+import { AuthData, LoginData, Question } from 'types';
 
 type ErrorsObject = {
   [key: string]: string;
@@ -46,6 +46,31 @@ export const validateSignUpData = (
 
   if (isEmpty(data.password)) errors.password = 'Must not be empty';
   if (data.password !== data.confirmPassword) errors.confirmPassword = 'Passowrds must be the same';
+
+  return {
+    errors,
+    valid: Object.keys(errors).length === 0 ? true : false
+  };
+};
+
+export const validateQuestionData = (data: Partial<Question>): ValidationObject => {
+  const errors: ErrorsObject = {};
+
+  if (!['options', 'input'].includes(data.type!)) errors.type = 'Invalid type';
+
+  if (isEmpty(data.difficulty) || Number(data.difficulty) < 0 || Number(data.difficulty) > 100)
+    errors.difficulty = 'Invalid difficulty';
+
+  if (isEmpty(data.text)) errors.text = 'Text is required';
+  else if (data.text!.length > 300) errors.text = `Text can't exceed 300 characters`;
+
+  if (isEmpty(data.answer)) errors.answer = 'Answer is required';
+  else if (data.type === 'options' && !data.options?.includes(data.answer!))
+    errors.answer = 'Answer must be a valid option';
+
+  if (data.type === 'options' && isEmpty(data.options)) errors.options = 'Options are required';
+  else if (data.type === 'options' && data.options!.length === 0)
+    errors.options = 'Options must contain at least 1 item';
 
   return {
     errors,

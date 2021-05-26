@@ -24,10 +24,18 @@ const handleError = async (response: Response) => {
 const fetch = async (input: string, init?: RequestInit) => {
   const url = API_BASE + input;
   const token = localStorage.getItem('authToken') || '';
-  const response = await window.fetch(url as any, {
-    ...init,
-    headers: { Authorization: token, ...init?.headers }
-  });
+  let response;
+  try {
+    response = await window.fetch(url as any, {
+      ...init,
+      headers: { Authorization: token, ...init?.headers }
+    });
+  } catch (err) {}
+
+  if (response.status === 401) {
+    localStorage.clear();
+    window.history.pushState({}, '', '/login');
+  }
   if (!response.ok) await handleError(response);
 
   return response;
