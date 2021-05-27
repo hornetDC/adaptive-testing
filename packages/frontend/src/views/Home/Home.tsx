@@ -11,7 +11,7 @@ const Home: React.FC = () => {
   return (
     <Container
       fluid="sm"
-      className="h-100 d-flex flex-column align-items-center justify-content-center">
+      className="d-flex flex-column align-items-center my-3">
       <h1 className="text-center mb-4">
         Welcome {authData?.email} {authData?.role === 'admin' && '(A)'}
       </h1>

@@ -52,15 +52,14 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ onCancel, onSubmit }) => {
         </Form.Control>
       </Form.Group>
       <Form.Group className="my-3" controlId="formDifficulty">
-        <Form.Label>Difficulty (0-100)</Form.Label>
-        <Form.Control
-          name="difficulty"
-          placeholder="Enter"
-          type="number"
-          min={0}
-          max={100}
-          required
-        />
+        <Form.Label>Difficulty</Form.Label>
+        <Form.Control name="difficulty" defaultValue="3" as="select" placeholder="Enter" required>
+          <option value="1">0.1</option>
+          <option value="2">0.3</option>
+          <option value="3">0.5</option>
+          <option value="4">0.7</option>
+          <option value="5">0.9</option>
+        </Form.Control>
       </Form.Group>
       <Form.Group className="my-3" controlId="formText">
         <Form.Label>

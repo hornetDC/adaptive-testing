@@ -7,6 +7,7 @@ import { getQuestions, deleteQuestion as deleteQuesionRequest } from 'api/questi
 import QuestionForm from './QuestionForm';
 import { ReactComponent as SVGTrash } from 'assets/trash.svg';
 import styles from './styles.module.scss';
+import clsx from 'clsx';
 
 const EditQuestions: React.FC = () => {
   const [isAddingQuestion, setIsAddingQuestion] = useState(false);
@@ -41,9 +42,7 @@ const EditQuestions: React.FC = () => {
   };
 
   return (
-    <Container
-      fluid="sm"
-      className="h-100 d-flex flex-column align-items-center justify-content-center">
+    <Container fluid="sm" className="d-flex my-3 flex-column align-items-center">
       <div className="border bg-light flex-column p-3 w-100">
         <h3 className="mb-4">Edit Questions</h3>
         {isAddingQuestion ? (
@@ -54,31 +53,33 @@ const EditQuestions: React.FC = () => {
         ) : (
           <>
             <Button onClick={() => setIsAddingQuestion(true)}>New Question</Button>
-            {questions.map(question => (
-              <div key={question.id} className="question border bg-white my-2 p-1">
-                <button
-                  className={styles.deleteButton}
-                  onClick={() => deleteQuesion(question.id)}
-                  disabled={deletingQuestionId === question.id}>
-                  <SVGTrash />
-                </button>
-                <div>#{question.id}</div>
-                <div>
-                  <strong>Text:</strong> {question.text}
-                </div>
-                <div>
-                  <strong>Answer:</strong> {question.answer}
-                </div>
-                {question.options && (
+            <div className={clsx('border bg-white p-2', styles.questionsList)}>
+              {questions.map(question => (
+                <div key={question.id} className={clsx('border bg-light p-1', styles.question)}>
+                  <button
+                    className={styles.deleteButton}
+                    onClick={() => deleteQuesion(question.id)}
+                    disabled={deletingQuestionId === question.id}>
+                    <SVGTrash />
+                  </button>
+                  <div>#{question.id}</div>
                   <div>
-                    <strong>Options:</strong> {question.options.join(' | ')}
+                    <strong>Text:</strong> {question.text}
                   </div>
-                )}
-                <div>
-                  <strong>Difficulty:</strong> {question.difficulty}
+                  <div>
+                    <strong>Answer:</strong> {question.answer}
+                  </div>
+                  {question.options && (
+                    <div>
+                      <strong>Options:</strong> {question.options.join(' | ')}
+                    </div>
+                  )}
+                  <div>
+                    <strong>Difficulty:</strong> {question.difficulty}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </>
         )}
       </div>

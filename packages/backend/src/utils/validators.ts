@@ -58,7 +58,7 @@ export const validateQuestionData = (data: Partial<Question>): ValidationObject 
 
   if (!['options', 'input'].includes(data.type!)) errors.type = 'Invalid type';
 
-  if (isEmpty(data.difficulty) || Number(data.difficulty) < 0 || Number(data.difficulty) > 100)
+  if (isEmpty(data.difficulty) || Number(data.difficulty) < 1 || Number(data.difficulty) > 5)
     errors.difficulty = 'Invalid difficulty';
 
   if (isEmpty(data.text)) errors.text = 'Text is required';
