@@ -36,8 +36,6 @@ const Test: React.FC = () => {
   const [answerLevels, setAnswerLevels] = useState({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
   const [completedLevels, setCompletedLevels] = useState(new Set<number>());
 
-  alert(`Test complete, your score is 4B`);
-
   const getFiveRandomQuestions = useCallback(questions => {
     if (!questions) return [];
 
