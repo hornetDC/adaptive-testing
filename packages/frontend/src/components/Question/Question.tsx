@@ -1,6 +1,8 @@
 import React, { ChangeEventHandler, useMemo } from 'react';
 import { Form } from 'react-bootstrap';
+import ReactMarkdown from 'react-markdown';
 import { FormControlElement, Question as QuestionData } from 'types';
+import styles from './styles.module.scss';
 
 interface QuestionProps {
   index: number;
@@ -36,9 +38,10 @@ const Question: React.FC<QuestionProps> = ({ index, data, onChange }) => {
 
   return (
     <div className="question mt-3 mb-3">
-      <h5>
-        <span className="text-secondary me-2">{index}.</span> {data.text}
-      </h5>
+      <div className="d-flex title">
+        <span className="text-secondary me-2">{index}.</span>{' '}
+        <ReactMarkdown className={styles.markdown}>{data.text}</ReactMarkdown>
+      </div>
       {answerSection}
     </div>
   );

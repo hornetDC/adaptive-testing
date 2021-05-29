@@ -1,5 +1,6 @@
-// const API_BASE = '/adaptive-testing/us-central1/api';
-const API_BASE = 'https://us-central1-adaptive-testing.cloudfunctions.net/api';
+const API_BASE = process.env.REACT_APP_API_BASE || '';
+
+console.log('API_BASE', API_BASE);
 
 const tryParseJSON = (json: string): object | null => {
   if (!json) return null;

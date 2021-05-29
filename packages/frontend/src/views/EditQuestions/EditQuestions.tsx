@@ -8,10 +8,11 @@ import QuestionForm from './QuestionForm';
 import { ReactComponent as SVGTrash } from 'assets/trash.svg';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
+import ReactMarkdown from 'react-markdown';
 
 const EditQuestions: React.FC = () => {
   const [isAddingQuestion, setIsAddingQuestion] = useState(false);
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [questions, setQuestions] = useState<Question[]>();
   const [deletingQuestionId, setDeletingQuestionId] = useState<string>();
 
   useEffect(() => {
@@ -25,7 +26,7 @@ const EditQuestions: React.FC = () => {
   }, []);
 
   const handleQuestionFormSubmit = (newQuestion: Question) => {
-    setQuestions(questions => [...questions, newQuestion]);
+    setQuestions(questions => [...(questions || []), newQuestion]);
     setIsAddingQuestion(false);
   };
 
@@ -34,7 +35,7 @@ const EditQuestions: React.FC = () => {
     setDeletingQuestionId(id);
     try {
       await deleteQuesionRequest(id);
-      setQuestions(questions => questions.filter(item => item.id !== id));
+      setQuestions(questions => questions!.filter(item => item.id !== id));
     } catch (err) {
       toast.error(err.response?.error || err.message);
     }
@@ -54,7 +55,8 @@ const EditQuestions: React.FC = () => {
           <>
             <Button onClick={() => setIsAddingQuestion(true)}>New Question</Button>
             <div className={clsx('border bg-white p-2', styles.questionsList)}>
-              {questions.map(question => (
+              {!questions && 'Loading...'}
+              {questions?.map(question => (
                 <div key={question.id} className={clsx('border bg-light p-1', styles.question)}>
                   <button
                     className={styles.deleteButton}
@@ -63,9 +65,7 @@ const EditQuestions: React.FC = () => {
                     <SVGTrash />
                   </button>
                   <div>#{question.id}</div>
-                  <div>
-                    <strong>Text:</strong> {question.text}
-                  </div>
+                  <ReactMarkdown className={styles.markdown}>{question.text}</ReactMarkdown>
                   <div>
                     <strong>Answer:</strong> {question.answer}
                   </div>

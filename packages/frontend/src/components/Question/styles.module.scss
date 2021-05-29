@@ -1,0 +1,8 @@
+.markdown {
+  overflow: auto;
+  margin-bottom: 10px;
+
+  p:last-of-type {
+    margin: 0;
+  }
+}
