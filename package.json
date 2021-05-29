@@ -7,9 +7,11 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "firebase:serve": "yarn workspace adaptive-testing-backend build && firebase serve",
+    "fe": "yarn workspace adaptive-testing-frontend",
     "be": "yarn workspace adaptive-testing-backend",
-    "fe": "yarn workspace adaptive-testing-frontend"
+    "webapp:serve": "serve -s /packages/frontend/build",
+    "firebase:serve": "yarn workspace adaptive-testing-backend build && firebase serve",
+    "firebase:deploy": "firebase deploy"
   },
   "workspaces": [
     "packages/backend",
