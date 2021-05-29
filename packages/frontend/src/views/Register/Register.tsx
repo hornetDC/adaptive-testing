@@ -6,15 +6,21 @@ import { LinkContainer } from 'react-router-bootstrap';
 import serialize from 'form-serialize';
 import AuthContext from 'context/AuthContext';
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
   const history = useHistory();
-  const { login } = useContext(AuthContext);
+  const { register } = useContext(AuthContext);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const values = serialize(e.currentTarget, { hash: true }) as any;
-      await login(values);
+      if (values.password !== values.passwordConfirm) {
+        document
+          .querySelector<HTMLInputElement>('#formConfirmPassword')!
+          .setCustomValidity(`Passwords don't match`);
+        return;
+      }
+      await register(values);
       history.replace('/');
     } catch (err) {
       toast.error(err.response?.error || err.message);
@@ -23,7 +29,7 @@ const Login: React.FC = () => {
 
   return (
     <Container className="flex-column" fluid="sm">
-      <h1 className="text-center my-4">Sign In</h1>
+      <h1 className="text-center my-4">Sign Up</h1>
       <Form className="p-3 w-100 bg-light border" onSubmit={handleSubmit}>
         <Form.Group controlId="formEmail">
           <Form.Label>Email address</Form.Label>
@@ -35,17 +41,22 @@ const Login: React.FC = () => {
           <Form.Control name="password" type="password" placeholder="Enter" required />
         </Form.Group>
 
+        <Form.Group className="mt-3" controlId="formConfirmPassword">
+          <Form.Label>Confirm Password</Form.Label>
+          <Form.Control name="passwordConfirm" type="password" placeholder="Enter" required />
+        </Form.Group>
+
         <Button className="mt-3" variant="primary" type="submit">
           Submit
         </Button>
       </Form>
-      <LinkContainer to="/register">
+      <LinkContainer to="/login">
         <Button className="mt-3" variant="outline-success">
-          Sign Up
+          Sign In
         </Button>
       </LinkContainer>
     </Container>
   );
 };
 
-export default Login;
+export default Register;

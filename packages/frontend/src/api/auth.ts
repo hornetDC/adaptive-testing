@@ -10,3 +10,13 @@ export async function login(params: LoginData): Promise<AuthData> {
   const data = await response.json();
   return data;
 }
+
+export async function register(params: LoginData): Promise<AuthData> {
+  const response = await fetch(`/register`, {
+    method: 'POST',
+    body: JSON.stringify(params),
+    headers: { 'Content-Type': 'application/json' }
+  });
+  const data = await response.json();
+  return data;
+}

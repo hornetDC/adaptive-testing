@@ -7,11 +7,23 @@ export type Question = {
   options?: string[];
 };
 
+export type UserRole = 'admin' | 'manager' | 'user';
+
+export type TestResultMark = '5A' | '4B' | '4C' | '3D' | '3E' | '2Fx' | '2F';
+
+export type User = {
+  id: string;
+  email: string;
+  role?: UserRole;
+  testResult?: TestResultMark;
+};
+
 export type AuthData = {
+  id: string;
   token: string;
   email: string;
   password: string;
-  role: 'admin' | 'manager' | 'user';
+  role: UserRole;
 };
 
 export type LoginData = {
@@ -19,4 +31,4 @@ export type LoginData = {
   password: string;
 };
 
-type FormControlElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+export type FormControlElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;

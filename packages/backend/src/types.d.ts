@@ -1,3 +1,19 @@
+export type UserRole = 'admin' | 'manager' | 'user';
+
+export type User = {
+  id: string;
+  email: string;
+  role?: UserRole;
+};
+
+export type AuthData = {
+  email: string;
+  password: string;
+  role: UserRole;
+};
+
+export type LoginData = Omit<AuthData, 'role'>;
+
 export type Question = {
   id: string;
   type: 'options' | 'input';
@@ -6,11 +22,3 @@ export type Question = {
   answer: string;
   options?: string[];
 };
-
-export type AuthData = {
-  email: string;
-  password: string;
-  role: 'admin' | 'manager' | 'user';
-};
-
-export type LoginData = Omit<AuthData, 'role'>;

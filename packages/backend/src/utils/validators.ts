@@ -33,9 +33,7 @@ const isEmail = (email: string) => {
   else return false;
 };
 
-export const validateSignUpData = (
-  data: AuthData & { confirmPassword: string }
-): ValidationObject => {
+export const validateRegistrationData = (data: AuthData): ValidationObject => {
   const errors: ErrorsObject = {};
 
   if (isEmpty(data.email)) {
@@ -45,7 +43,6 @@ export const validateSignUpData = (
   }
 
   if (isEmpty(data.password)) errors.password = 'Must not be empty';
-  if (data.password !== data.confirmPassword) errors.confirmPassword = 'Passowrds must be the same';
 
   return {
     errors,

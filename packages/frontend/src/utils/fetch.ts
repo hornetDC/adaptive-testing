@@ -1,4 +1,5 @@
 const API_BASE = '/adaptive-testing/us-central1/api';
+// const API_BASE = 'https://us-central1-adaptive-testing.cloudfunctions.net/api';
 
 const tryParseJSON = (json: string): object | null => {
   if (!json) return null;
@@ -28,10 +29,6 @@ const fetch = async (input: string, init?: RequestInit) => {
     ...init,
     headers: { Authorization: token, ...init?.headers }
   });
-  // if (response.status === 401) {
-  //   localStorage.clear();
-  //   window.history.pushState({}, '', '/login');
-  // }
   if (!response.ok) await handleError(response);
 
   return response;

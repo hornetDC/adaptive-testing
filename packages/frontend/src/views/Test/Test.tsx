@@ -1,11 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
 import { toast } from 'react-toastify';
 import { getQuestions } from 'api/questions';
-import { FormControlElement, Question as QuestionData } from 'types';
+import { FormControlElement, Question as QuestionData, TestResultMark } from 'types';
 import Question from 'components/Question';
+import { submitTestResult } from 'api/users';
+import AuthContext from 'context/AuthContext';
 
 const MAX_LEVEL = 5;
 const LEVEL_CORRECT_ANSWERS_TO_FINISH = 15;
@@ -13,7 +15,7 @@ const LEVELS_COMPLETED_TO_FINISH = 3;
 
 const levelCoefficients = { 1: 0.1, 2: 0.3, 3: 0.5, 4: 0.7, 5: 0.9 };
 
-function getMarkName(score: number) {
+function getMarkName(score: number): TestResultMark {
   if (score >= 9) return '5A';
   else if (score >= 7.5) return '4B';
   else if (score >= 6) return '4C';
@@ -29,6 +31,7 @@ type QuestionGroups = {
 
 const Test: React.FC = () => {
   const history = useHistory();
+  const { authData } = useContext(AuthContext);
   const [questionGroups, setQuestionGroups] = useState<QuestionGroups>({});
   const [currentLevel, setCurrentLevel] = useState(3);
   const [currentAnswers, setCurrentAnswers] = useState({});
@@ -89,8 +92,8 @@ const Test: React.FC = () => {
 
     const newCompletedLevels = completedLevels;
     newCompletedLevels.add(currentLevel);
-    console.log('newAnswerLevels', newAnswerLevels);
-    console.log('newCompletedLevels', newCompletedLevels);
+    // console.log('newAnswerLevels', newAnswerLevels);
+    // console.log('newCompletedLevels', newCompletedLevels);
 
     // END TEST
     if (
@@ -101,7 +104,9 @@ const Test: React.FC = () => {
         (prev, [level, answers]) => (prev += levelCoefficients[level] * answers),
         0
       );
-      alert(`Test complete, your score is ${getMarkName(finalScore)}`);
+      const testResult = getMarkName(finalScore);
+      submitTestResult({ userId: authData!.id, testResult });
+      alert(`Test complete, your score is ${testResult}`);
       history.push('/');
       return;
     }

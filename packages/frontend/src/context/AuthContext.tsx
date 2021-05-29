@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 
 import { AuthData, LoginData } from 'types';
-import { login as loginRequest } from 'api/auth';
+import { login as loginRequest, register as registerRequest } from 'api/auth';
 
 const getAuthDataFromStorage = (): AuthData | undefined => {
   try {
@@ -18,6 +18,7 @@ interface AuthContextValues {
   authData?: AuthData;
   setAuthData: React.Dispatch<React.SetStateAction<AuthData | undefined>>;
   login: (data: LoginData) => Promise<void>;
+  register: (data: LoginData) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -34,6 +35,13 @@ export const AuthContextWrapper = ({ children }) => {
     localStorage.setItem('authToken', `Bearer ${authData.token}`);
   };
 
+  const register = async (data: LoginData) => {
+    const authData = await registerRequest(data);
+    setAuthData(authData);
+    localStorage.setItem('authData', JSON.stringify(authData));
+    localStorage.setItem('authToken', `Bearer ${authData.token}`);
+  };
+
   const logout = useCallback(async () => {
     setAuthData(undefined);
     localStorage.clear();
@@ -44,6 +52,7 @@ export const AuthContextWrapper = ({ children }) => {
     authData,
     setAuthData,
     login,
+    register,
     logout
   };
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
