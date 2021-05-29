@@ -1,12 +1,10 @@
 {
   "name": "adaptive-testing",
-  "author": "",
-  "description": "",
+  "author": "hornetDC",
+  "description": "Adaptive testing monorepo",
   "repository": "https://github.com/hornetDC/adaptive-testing.git",
   "private": true,
   "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
   "scripts": {
     "fe": "yarn workspace adaptive-testing-frontend",
     "be": "yarn workspace adaptive-testing-backend",
