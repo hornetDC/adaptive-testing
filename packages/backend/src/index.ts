@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions';
 import * as express from 'express';
-import { config as dotenv } from 'dotenv';
+// import { config as dotenv } from 'dotenv';
 import * as cors from 'cors';
 import { getQuestions, createQuestion, deleteQuestion } from './controllers/questions';
 import {
@@ -12,7 +12,7 @@ import {
 } from './controllers/users';
 import { isAuthenticated, isAuthorized } from './utils/auth';
 
-dotenv({ path: `${__dirname}/../.env` });
+// dotenv({ path: `${__dirname}/../.env` });
 
 const app = express();
 

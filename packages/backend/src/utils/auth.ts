@@ -1,10 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { admin } from './admin';
 
-export function getAdminUsers() {
-  return (process.env.ADMIN_USERS || '').replace(' ', '').split(',');
-}
-
 export async function isAuthenticated(req: Request, res: Response, next: NextFunction) {
   const { authorization } = req.headers;
 
