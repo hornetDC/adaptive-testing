@@ -16,7 +16,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ onCancel, onSubmit }) => {
   const [questionType, setQuestionType] = useState<QuestionType>('options');
   const [optionsString, setOptionsString] = useState('');
   const optionsArray = optionsString
-    .split(',')
+    .split('$')
     .filter(Boolean)
     .map(item => item.trim());
 
@@ -85,7 +85,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ onCancel, onSubmit }) => {
       {questionType === 'options' && (
         <Form.Group className="my-3" controlId="formOptions">
           <Form.Label>
-            Options <span className="text-secondary">(separated by commas)</span>
+            Options <span className="text-secondary">(separated by '$' symbols)</span>
           </Form.Label>
           <Form.Control
             className="mb-1"
