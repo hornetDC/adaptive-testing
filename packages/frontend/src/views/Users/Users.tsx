@@ -63,7 +63,7 @@ const Home: React.FC = () => {
         ))}
       </div>
       <LinkContainer to="/">
-        <Button className="me-auto mt-3" variant="secondary">
+        <Button className="me-auto my-3" variant="secondary">
           Home
         </Button>
       </LinkContainer>
