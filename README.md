@@ -28,6 +28,10 @@ Builds the app for production to the `build` folder.\
 
 Для запуска собранного приложения используйте скрипт `yarn webapp:serve`.
 
+### `yarn webapp:deploy`
+
+Запускает билд из скрипта выше и деплоит сайт на [GitHub Pages](https://pages.github.com/).
+
 ### `yarn firebase:serve`
 
 Запуск билда серверной части приложения, после этого поднимается локальная версия firebase на [http://localhost:5000](http://localhost:5000)

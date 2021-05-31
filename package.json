@@ -9,6 +9,7 @@
     "fe": "yarn workspace adaptive-testing-frontend",
     "be": "yarn workspace adaptive-testing-backend",
     "webapp:serve": "serve -s /packages/frontend/build",
+    "webapp:deploy": "yarn workspace adaptive-testing-frontend build && yarn workspace adaptive-testing-frontend deploy",
     "firebase:serve": "yarn workspace adaptive-testing-backend build && firebase serve",
     "firebase:deploy": "firebase deploy"
   },
